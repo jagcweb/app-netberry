@@ -1,0 +1,93 @@
+<p class="w-100 text-center p-2" style="font-size:18px;">{{status}}</p>
+
+<div>
+    <div *ngIf="!token">
+        <h1 class="w-100 text-center">Para visualizar y crear tus tareas haz login</h1>
+    </div>
+    <div *ngIf="token">
+        <div mat-dialog-content class="ml-2">
+            <form *ngIf="!selectedTask" class="w-100" [formGroup]="createTaskForm" (ngSubmit)="onSubmit()">
+                <div class="form-group mt-2">
+                    <label for="name">Nombre</label>
+                    <input type="text" name="name" formControlName="name" class="form-control" required>
+                    <small *ngIf="!createTaskFormControl.name.valid && createTaskFormControl.name.touched" class="invalid-feedback d-block">
+                        El nombre no es válido
+                    </small>
+                </div>
+
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" formControlName="done" name="done" value="1">
+                    <label class="form-check-label" for="flexCheckDefault">
+                    Marcar como realizado
+                    </label>
+                </div>
+
+                <div class="form-group mt-2">
+                    <input type="submit" class="btn btn-dark waves-dark" value="Crear">
+                </div>
+
+            </form>
+
+            <form *ngIf="selectedTask" class="w-100" [formGroup]="createTaskForm" (ngSubmit)="onUpdate(selectedTask.id)">
+                <div class="form-group mt-2">
+                    <label for="name">Nombre</label>
+                    <input type="text" name="name" formControlName="name" class="form-control" required>
+                    <small *ngIf="!createTaskFormControl.name.valid && createTaskFormControl.name.touched" class="invalid-feedback d-block">
+                        El nombre no es válido
+                    </small>
+                </div>
+
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" formControlName="done" name="done" value="1">
+                    <label class="form-check-label" for="flexCheckDefault">
+                      Marcar como realizado
+                    </label>
+                </div>
+
+                <div class="form-group mt-2">
+                    <input type="submit" class="btn btn-dark waves-dark" value="Actualizar">
+                </div>
+
+                <button class="w-100 btn btn-dark" mat-button (click)="setCreate()">Cambiar a crear tarea</button>
+            </form>
+        </div>
+
+        <div *ngIf="!tasks || tasks.length === 0">
+            <p class="w-100 text-center">No tienes creada aún ninguna tarea</p>
+        </div>
+
+        <div *ngIf="tasks && tasks.length > 0">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table mt-3">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let t of tasks">
+                                <th scope="row">{{t.id}}</th>
+                                <td>{{t.name}}</td>
+                                <td [ngSwitch]="t.done">
+                                    <span *ngSwitchCase="0">Pendiente</span>
+                                    <span *ngSwitchCase="1">Hecho</span>
+                                </td>
+                                <td [ngSwitch]="t.done">
+                                    <div *ngSwitchCase="0">
+                                        <a href="#" class="d-block" (click)="setModify(t)">Editar</a>
+                                    </div>
+                                    <a href="#" class="d-block" (click)="onDelete(t.id)">Borrar</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<mat-toolbar class="mb-4">
+    <span>Netberry</span>
+    <span class="example-spacer"></span>
+    <button mat-icon-button class="example-icon" [matMenuTriggerFor]="menu">
+        <mat-icon class="fs-3">account_circle</mat-icon>
+        <mat-menu #menu>
+            <div *ngIf="!token">
+                <a [routerLink]="['/user/login']"><menu mat-menu-item>Login</menu></a>
+                <a [routerLink]="['/user/register']"><menu mat-menu-item>Register</menu></a>
+            </div>
+
+            <div *ngIf="token">
+                <span class="d-block text-center p-2">{{user?.email}}</span>
+                <div class="dropdown-divider"></div>
+                <menu mat-menu-item (click)="logout()">Logout</menu>
+            </div>
+        </mat-menu>
+    </button>
+</mat-toolbar>
+
+<router-outlet></router-outlet>
